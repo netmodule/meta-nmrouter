@@ -29,76 +29,76 @@ To learn how to build an image and to find the build dependencies visit:
 http://www.yoctoproject.org/docs/2.0/ref-manual/ref-manual.html
 
 Memory Map of the FPGA (to switch SIMs, reset modems):
-Address	Width	Name/Comment
-0x0020	16	LED
-		LED Control Register
-	Slice	Name	Type	Reset	Description
-	0	LED0 green	RW		1		Enable LED 0 (green)
-	1	LED0 red	RW		1		Enable LED 0 (red)
-	2	LED1 green	RW		0		Enable LED 1 (green)
-	3	LED1 red	RW		0		Enable LED 1 (red)
-	4	LED2 green	RW		0		Enable LED 2 (green)
-	5	LED2 red	RW		0		Enable LED 2 (red)
-	6	LED3 green	RW		0		Enable LED 3 (green)
-	7	LED3 red	RW		0		Enable LED 3 (red)
-	8	LED4 green	RW		0		Enable LED 4 (green)
-	9	LED4 red	RW		0		Enable LED 4 (red)
-	10	LED5 green	RW		0		Enable LED 5 (green)
-	11	LED5 red	RW		0		Enable LED 5 (red)
-	12	LED6 green	RW		0		Enable LED 6 (green)
-	13	LED6 red	RW		0		Enable LED 6 (red)
-	14	LED7 green	RW		0		Enable LED 7 (green)
-	15	LED7 red	RW		0		Enable LED 7 (red)
+Address     Width   Name/Comment
+0x0020      16      LED
+LED Control Register
+    Slice    Name        Type    Reset    Description
+    0        LED0 green  RW      1        Enable LED 0 (green)
+    1        LED0 red    RW      1        Enable LED 0 (red)
+    2        LED1 green  RW      0        Enable LED 1 (green)
+    3        LED1 red    RW      0        Enable LED 1 (red)
+    4        LED2 green  RW      0        Enable LED 2 (green)
+    5        LED2 red    RW      0        Enable LED 2 (red)
+    6        LED3 green  RW      0        Enable LED 3 (green)
+    7        LED3 red    RW      0        Enable LED 3 (red)
+    8        LED4 green  RW      0        Enable LED 4 (green)
+    9        LED4 red    RW      0        Enable LED 4 (red)
+    10       LED5 green  RW      0        Enable LED 5 (green)
+    11       LED5 red    RW      0        Enable LED 5 (red)
+    12       LED6 green  RW      0        Enable LED 6 (green)
+    13       LED6 red    RW      0        Enable LED 6 (red)
+    14       LED7 green  RW      0        Enable LED 7 (green)
+    15       LED7 red    RW      0        Enable LED 7 (red)
 
 SIM Card Control
-Address	Width	Name/Comment
-0x0040	16	SIM Ctrl
-			SIM Slot Control Register
-	Slice	Name		Type		Reset					Description	
-	2..0	SIM1_SEL	RW			0						000:  disconnect  
-															001: Connect Bus 1  
-															010: Connect Bus 2  
-															011: Connect Bus 3  
-															100: Connect Bus 4  
-															Note:  If no SIM Card is inserted, the power is disable of the corresponding slot.
-	3		N/A			R			0						Reserved	
-	6..4	SIM2_SEL	RW			0						000:  disconnect  
-															001: Connect Bus 1  
-															010: Connect Bus 2  
-															011: Connect Bus 3  
-															100: Connect Bus 4  
-															Note:  If no SIM Card is inserted, the power is disabled of the corresponding slot.
-	7		N/A			R			0						Reserved	
-	10..8	SIM3_SEL	RW			0						000:  disconnect  
-															001: Connect Bus 1  
-															010: Connect Bus 2  
-															011: Connect Bus 3  
-															100: Connect Bus 4  
-															Note:  If no SIM Card is inserted, the power is disable of the corresponding slot.
-	11		N/A			R			0						Reserved	
-	14..12	SIM4_SEL	RW			0						000:  disconnect  
-															001: Connect Bus 1  
-															010: Connect Bus 2  
-															011: Connect Bus 3  
-															100: Connect Bus 4  
-															Note:  If no SIM Card is inserted, the power is disabled of the corresponding slot.
-	15		N/A			R			0						Reserved	
+Address     Width   Name/Comment
+0x0040      16      SIM Ctrl
+SIM Slot Control Register
+    Slice   Name        Type        Reset   Description    
+    2..0    SIM1_SEL    RW          0       000:  disconnect  
+                                            001: Connect Bus 1  
+                                            010: Connect Bus 2  
+                                            011: Connect Bus 3  
+                                            100: Connect Bus 4  
+                                            Note:  If no SIM Card is inserted, the power is disable of the corresponding slot.
+    3        N/A        R           0       Reserved    
+    6..4    SIM2_SEL    RW          0       000:  disconnect  
+                                            001: Connect Bus 1  
+                                            010: Connect Bus 2  
+                                            011: Connect Bus 3  
+                                            100: Connect Bus 4  
+                                            Note:  If no SIM Card is inserted, the power is disabled of the corresponding slot.
+    7        N/A        R           0       Reserved    
+    10..8    SIM3_SEL   RW          0       000:  disconnect  
+                                            001: Connect Bus 1  
+                                            010: Connect Bus 2  
+                                            011: Connect Bus 3  
+                                            100: Connect Bus 4  
+                                            Note:  If no SIM Card is inserted, the power is disable of the corresponding slot.
+    11        N/A       R           0       Reserved    
+    14..12    SIM4_SE   RW          0       000:  disconnect  
+                                            001: Connect Bus 1  
+                                            010: Connect Bus 2  
+                                            011: Connect Bus 3  
+                                            100: Connect Bus 4  
+                                            Note:  If no SIM Card is inserted, the power is disabled of the corresponding slot.
+    15        N/A       R           0       Reserved    
 
 
 PCIe Mini Slot Control:
-Address	Width	Name/Comment
-0x0030	16	PCIe Reset
-		PCIe Slot Reset
-	Slice	Name		Type	Reset	Description
-	0		PCIe1 RST~	RW		0		PCIe Slot 1 Reset
-										0: reset asserted
-	1		PCIe2 RST~	RW		0		PCIe Slot 2 Reset
-										0: reset asserted
-	2		PCIe3 RST~	RW		0		PCIe Slot 3 Reset
-										0: reset asserted
-	3		PCIe4 RST~	RW		0		PCIe Slot 4 Reset
-										0: reset asserted
-	4..15	n/a			R		0		
+Address     Width    Name/Comment
+0x0030      16       PCIe Reset
+PCIe Slot Reset
+    Slice    Name           Type    Reset   Description
+    0        PCIe1 RST~     RW      0       PCIe Slot 1 Reset
+                                            0: reset asserted
+    1        PCIe2 RST~     RW      0       PCIe Slot 2 Reset
+                                            0: reset asserted
+    2        PCIe3 RST~     RW      0       PCIe Slot 3 Reset
+                                            0: reset asserted
+    3        PCIe4 RST~     RW      0       PCIe Slot 4 Reset
+                                            0: reset asserted
+    4..15    n/a            R       0        
 
 The FPGA Base address is at 0xfd000000, to enable for example LED0:red write 0x2 to 0xfd000020:
 devmem2 0xfd000020 hw 0x02
