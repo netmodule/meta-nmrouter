@@ -8,10 +8,9 @@ DESCRIPTION = "Linux kernel for various NetModule hardware"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
-# Customer repo
-SRC_URI = "git://git.netmodule.intranet/usr/se/linux;protocol=ssh;user=gitolite;nobranch=1"
+SRC_URI = "git://git@gitlab.com/eichest/linux.git;protocol=ssh;nobranch=1"
 
-SRCREV ?= "master"
+SRCREV ??= "master"
 PV = "4.5-${SRCPV}"
 PR = "r0"
 
