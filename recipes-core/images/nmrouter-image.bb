@@ -2,22 +2,20 @@ inherit core-image
 
 SUMMARY = "Test image"
 
-UBOOT_CONFIG = "sdcard"
-
 KERNEL_IMAGETYPE = "uImage"
 
 IMAGE_FSTYPES_append = " tar.gz "
 
-IMAGE_FEATURES += " \
+IMAGE_FEATURES_append = " \
                 tools-debug \
                 "
 
-IMAGE_FEATURES += " \
+IMAGE_FEATURES_append = " \
                 package-management \
                 ssh-server-openssh \
                 "
 
-BENCH_TOOLS += " \
+BENCH_TOOLS = " \
                 tcpdump \
                 lrzsz \
                 lmbench \
@@ -30,9 +28,16 @@ BENCH_TOOLS += " \
                 strongswan \
                "
 
-BENCH_TOOLS_cortexa9hf-neon_append += " cpuburn-neon "
+EASY_EDITOR = " \
+                nano \
+              "
 
-IMAGE_INSTALL += " \
+BENCH_TOOLS_cortexa9hf-neon_append = " cpuburn-neon "
+BENCH_TOOLS_cortexa8hf-neon_append = " cpuburn-neon "
+
+PREFERED_VERSION-pn_nodejs = "4.4.5"
+
+IMAGE_INSTALL_append = " \
                 linux-firmware \
                 linux-firmware-ath9k \
                 hostapd \
@@ -50,11 +55,16 @@ IMAGE_INSTALL += " \
                 iptables \
                 pciutils \
                 kernel-modules \
+                kernel-devicetree \
+                node \
+                python-subprocess \
                 ${BENCH_TOOLS} \
+                ${EASY_EDITOR} \
                 "
 
 IMAGE_INSTALL_cortex9hf-neon_append = " kernel-devicetree "
 IMAGE_INSTALL_cortex9hf_append = " kernel-devicetree "
+IMAGE_INSTALL_append_am335x-nbhw16 = " nbhw16-ctrl "
 
 LICENSE = "BSD"
 
