@@ -1,0 +1,26 @@
+diff --git a/../src/ap/hw_features.c b/../src/ap/hw_features.c
+index 05431d3..7458d06 100644
+--- ../src/ap/hw_features.c
++++ ../src/ap/hw_features.c
+@@ -306,10 +306,12 @@ static void ieee80211n_check_scan(struct hostapd_iface *iface)
+ 	iface->secondary_ch = iface->conf->secondary_channel;
+ 	if (!oper40) {
+ 		wpa_printf(MSG_INFO, "20/40 MHz operation not permitted on "
+-			   "channel pri=%d sec=%d based on overlapping BSSes",
++			   "channel pri=%d sec=%d based on overlapping BSSes "
++			   "but will force now",
+ 			   iface->conf->channel,
+ 			   iface->conf->channel +
+ 			   iface->conf->secondary_channel * 4);
++#if 0
+ 		iface->conf->secondary_channel = 0;
+ 		if (iface->drv_flags & WPA_DRIVER_FLAGS_HT_2040_COEX) {
+ 			/*
+@@ -318,6 +320,7 @@ static void ieee80211n_check_scan(struct hostapd_iface *iface)
+ 			 * are received from associating stations.
+ 			 */
+ 		}
++#endif
+ 	}
+ 
+ 	res = ieee80211n_allowed_ht40_channel_pair(iface);
