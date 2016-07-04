@@ -1,0 +1,62 @@
+{
+    "serial":                   {"id": 1,     "type": "String"},
+    "production_date":          {"id": 2,     "type": "Date"},
+    "hw_ver":                   {"id": 3,     "type": "UInt8"},
+    "hw_rel":                   {"id": 4,     "type": "UInt8"},
+    "prod_name":                {"id": 5,     "type": "String"},
+    "prod_variant":             {"id": 6,     "type": "UInt16"},
+    "prod_compatibility":       {"id": 7,     "type": "String"},
+    
+    "eth_mac":                  {"id": 8,     "type": "MAC"},
+    "ip_addr":                  {"id": 9,     "type": "IPV4"},
+    "ip_netmask":               {"id": 10,    "type": "IPV4"},
+    "ip_gateway":               {"id": 11,    "type": "IPV4"},
+    
+    "usb_device_id":            {"id": 12,    "type": "UInt16"},
+    "usb_vendor_id":            {"id": 13,    "type": "UInt16"},
+
+    "ram_size":                 {"id": 14,    "type": "UInt32"},
+    "ram_size64":               { "id": 15,   "type": "UInt64"},
+    "flash_size":               { "id": 16,   "type": "UInt32"},
+    "flash_size64":             { "id": 17,   "type": "UInt64"},
+    "eeprom_size":              { "id": 18,   "type": "UInt32"},
+    "nv_ram_size":              { "id": 19,   "type": "UInt32"},
+
+    "cpu_base_clk":             { "id": 20,   "type": "UInt32"},
+    "cpu_core_clk":             { "id": 21,   "type": "UInt32"},
+    "cpu_bus_clk":              { "id": 22,   "type": "UInt32"},
+    "ram_clk":                  { "id": 23,   "type": "UInt32"},
+
+    "partition":                { "id": 24,   "type": "Partition"},
+    "partition64":              { "id": 25,   "type": "Partition64"},
+
+    "lcd_type":                 { "id": 26,   "type": "UInt16"},
+    "lcd_backlight":            { "id": 27,   "type": "UInt8"},
+    "lcd_contrast":             { "id": 28,   "type": "UInt8"},
+    "touch_type":               { "id": 29,   "type": "UInt16"},
+
+    "manufacturer_id":          { "id": 30,   "type": "String"},
+    "hmac-sha1-4":              { "id": 31,   "type": "Hash"},
+    "fpga_info":                { "id": 32,   "type": "UInt32"},
+
+    "ui_adapter_type":          { "id": 4096, "type": "UInt16"},
+    "hw_flavor":                { "id": 4097, "type": "UInt32"},
+    "voltage":                  { "id": 4098, "type": "UInt8"},
+
+    "pd_module0":               { "id": 4100, "type": "String"},
+    "pd_module1":               { "id": 4101, "type": "String"},
+    "pd_module2":               { "id": 4102, "type": "String"},
+    "pd_module3":               { "id": 4103, "type": "String"},
+    "pd_module4":               { "id": 4104, "type": "String"},
+    "pd_module5":               { "id": 4105, "type": "String"},
+    "pd_phy0":                  { "id": 4110, "type": "String"},
+    "pd_phy1":                  { "id": 4111, "type": "String"},
+    "pd_dio":                   { "id": 4120, "type": "String"},
+    "pd_serial":                { "id": 4121, "type": "String"},
+    "pd_sim":                   { "id": 4122, "type": "String"},
+    "pd_led":                   { "id": 4123, "type": "String"},
+    "pd_usbhost":               { "id": 4124, "type": "String"},
+    
+    "boot_part":                { "id": 32768, "type": "UInt8"},
+    "factory_reset":            { "id": 32769, "type": "UInt8"}
+}

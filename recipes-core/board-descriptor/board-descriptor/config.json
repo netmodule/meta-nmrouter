@@ -1,0 +1,10 @@
+{    
+    "tag_list": "/etc/bd/bd.json",
+    "eeprom": [
+        { "path": "/sys/bus/i2c/devices/0-0050/eeprom", "valid_bds": [
+                {"name": "info", "start": 0, "size": 1024}, 
+                {"name": "settings", "start": 1536, "size": 512} 
+            ] 
+        }
+    ]
+}
