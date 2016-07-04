@@ -215,8 +215,8 @@ class Descriptor:
         if tlv is None:
             return False
 
-        if not self.bd.is_writable:
-            raise IOError("This operation is not permitted on \
-                          this descriptor (ro)")
+        if not self.bdraw.is_writable:
+            raise IOError("This operation is not permitted on "
+                          "this descriptor (ro)")
         self._do_set(name, value, tlv)
         return True
