@@ -58,6 +58,8 @@ IMAGE_INSTALL_append = " \
                 kernel-devicetree \
                 node \
                 python-subprocess \
+                board-descriptor \
+                sw-update \
                 ${BENCH_TOOLS} \
                 ${EASY_EDITOR} \
                 "
