@@ -179,27 +179,92 @@ cleanup()
   rm $EXTRACTED_IMAGE
 }
 
+check_file()
+{
+  if [ ! -e "$1" ]
+  then
+    log ERROR "Please provide a valid update image"
+    exit -1
+  else
+    IMAGE_LOCATION=$1
+  fi
+}
+
+update_linux()
+{
+  log INFO "Starting linux update ..."
+  check_file $1
+
+  #extract_header_infos
+  #check_image_compatibility
+  # extract_image
+  # Don't use the header stuff for now, move the file instead
+  EXTRACTED_IMAGE=$IMAGE_LOCATION
+  # Also don't check the md5 sum
+  # check_image_md5
+  flash_firmware
+  cleanup
+
+  log INFO "Linux update succeed!"
+}
+
+update_uboot()
+{
+  log INFO "Starting u-boot update ..."
+  check_file $1
+
+  head_should=$(echo -e "\x27\x05\x19\x56")
+  head_is=$(dd if=$1 bs=1 count=4 2>/dev/null)
+  if [ "$head_is" != "$head_should" ]; then
+    log ERROR "Header of the input image seems invalid, abort update"
+    return
+  fi
+
+  dd if=$1 of=/dev/mmcblk0 bs=512 seek=768 &> /dev/null
+  if [ $? -ne 0 ]; then
+    log ERROR "Failed to write u-boot to mmcblk0"
+    return
+  fi
+  log INFO "u-boot update succeed!"
+}
+
+update_spl()
+{
+  log INFO "Starting spl update ..."
+  check_file $1
+
+  head_should=$(echo -e "\x40\x00\x00\x00")
+  head_is=$(dd if=$1 bs=1 count=4 2>/dev/null)
+  if [ "$head_is" != "$head_should" ]; then
+    log ERROR "Header of the input image seems invalid, abort update"
+    return
+  fi
+
+  dd if=$1 of=/dev/mmcblk0 bs=512 seek=256 &> /dev/null
+  if [ $? -ne 0 ]; then
+    log ERROR "Failed to write spl to mmcblk0"
+    return
+  fi
+  log INFO "spl update succeed!"
+}
+
 ############################ Start of script ###################################
-if [ ! -e "$1" ]
-then
-  log ERROR "Please provide a valid update image"
-  exit -1
-else
-  IMAGE_LOCATION=$1
-fi
 
-log INFO "Starting update ..."
-
-#extract_header_infos
-#check_image_compatibility
-# extract_image
-# Don't use the header stuff for now, move the file instead
-EXTRACTED_IMAGE=$IMAGE_LOCATION
-# Also don't check the md5 sum
-# check_image_md5
-flash_firmware
-cleanup
-
-log INFO "Software update succeed!"
+while getopts ":l:u:s:h" opt; do
+  case $opt in
+    l)
+      update_linux $OPTARG
+      ;;
+    u)
+      update_uboot $OPTARG
+      ;;
+    s)
+      update_spl $OPTARG
+      ;;
+    h)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+done
 
 exit 0
