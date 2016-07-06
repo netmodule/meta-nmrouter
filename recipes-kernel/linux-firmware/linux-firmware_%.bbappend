@@ -1,5 +1,7 @@
 SRCREV = "40e9ae84308274b91ac069fba2f1a290fcdc83fc"
 
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+
 LIC_FILES_CHKSUM = "\
     file://LICENCE.Abilis;md5=b5ee3f410780e56711ad48eadc22b8bc \
     file://LICENCE.agere;md5=af0133de6b4a9b2522defd5f188afd31 \
@@ -39,3 +41,13 @@ LIC_FILES_CHKSUM = "\
     file://LICENSE.radeon;md5=6c7f97c6c62bdd9596d0238bb205118c \
     file://LICENCE.siano;md5=602c79ae3f98f1e73d880fd9f940a418 \
 "
+SRC_URI_append = " \
+                 file://ti-connectivity/wl12xx-nvs.bin \
+                 file://ti-connectivity/wl18xx-conf.bin \
+                 "
+
+do_install_append() {
+    cp -r ${WORKDIR}/ti-connectivity/* ${D}/lib/firmware/ti-connectivity/
+}
+
+
