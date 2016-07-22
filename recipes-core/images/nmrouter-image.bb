@@ -60,6 +60,7 @@ IMAGE_INSTALL_append = " \
                 python-subprocess \
                 board-descriptor \
                 sw-update \
+                tibluetooth \
                 ${BENCH_TOOLS} \
                 ${EASY_EDITOR} \
                 "
