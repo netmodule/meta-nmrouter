@@ -60,6 +60,8 @@ IMAGE_INSTALL_append = " \
                 python-subprocess \
                 networkmanager \
                 cockpit \
+                board-descriptor \
+                sw-update \
                 ${BENCH_TOOLS} \
                 ${EASY_EDITOR} \
                 "

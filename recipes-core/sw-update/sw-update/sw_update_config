@@ -1,0 +1,12 @@
+PLATFORM_FIRST_PARTITION="/dev/mmcblk0p2"
+PLATFORM_SECOND_PARTITION="/dev/mmcblk0p3"
+PLATFORM_BOOT_PARTITION="/dev/mmcblk0p1"
+PLATFORM_PROD_COMPATIBILITY=
+PLATFORM_HW_VERSION=
+PLATFORM_ACTIVE_PARTITION=$(bd -r boot_part)
+
+set_active_partition()
+{
+    bd -w boot_part -v $1
+}
+
