@@ -58,6 +58,8 @@ IMAGE_INSTALL_append = " \
                 kernel-devicetree \
                 node \
                 python-subprocess \
+                networkmanager \
+                cockpit \
                 ${BENCH_TOOLS} \
                 ${EASY_EDITOR} \
                 "
