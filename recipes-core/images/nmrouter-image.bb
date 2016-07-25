@@ -62,6 +62,7 @@ IMAGE_INSTALL_append = " \
                 cockpit \
                 board-descriptor \
                 sw-update \
+                tibluetooth \
                 ${BENCH_TOOLS} \
                 ${EASY_EDITOR} \
                 "
