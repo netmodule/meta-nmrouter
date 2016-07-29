@@ -62,14 +62,16 @@ IMAGE_INSTALL_append = " \
                 cockpit \
                 board-descriptor \
                 sw-update \
-                tibluetooth \
                 ${BENCH_TOOLS} \
                 ${EASY_EDITOR} \
                 "
 
 IMAGE_INSTALL_cortex9hf-neon_append = " kernel-devicetree "
 IMAGE_INSTALL_cortex9hf_append = " kernel-devicetree "
-IMAGE_INSTALL_append_am335x-nbhw16 = " nbhw16-ctrl "
+IMAGE_INSTALL_append_am335x-nbhw16 = " \
+                nbhw16-ctrl \
+                tibluetooth \
+                "
 
 LICENSE = "BSD"
 

@@ -15,6 +15,7 @@ SRCREV ?= "${AUTOREV}"
 PV ?= "4.5-${SRCPV}"
 PV_beaglebone = "4.4-${SRCPV}"
 PV_am335x-nbhw16 = "4.4-${SRCPV}"
+PV_armada-385-nbhw17-nb2800 = "4.7-${SRCPV}"
 
 PR = "r0"
 
