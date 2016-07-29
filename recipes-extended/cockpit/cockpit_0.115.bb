@@ -11,7 +11,7 @@ SRC_URI = "git://github.com/cockpit-project/cockpit.git;protocol=https"
 S = "${WORKDIR}/git"
 
 DEPENDS = "node-native json-glib libssh libpam keyutils krb5 systemd polkit glib-networking"
-REDPENDS_${PN} =  "json-glib libssh libpam keyutils krb5 libsystemd polkit bash glib-networking"
+RDEPENDS_${PN} =  "json-glib libssh libpam keyutils krb5 libsystemd polkit bash glib-networking"
 
 EXTRA_AUTORECONF_append = " -I ${STAGING_DATADIR}/aclocal"
 
