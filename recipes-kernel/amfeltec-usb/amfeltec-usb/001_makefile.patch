@@ -1,0 +1,80 @@
+diff --git a/Makefile b/Makefile
+index 37674a4..5e53b4c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -14,7 +14,7 @@ JUNK	= *~ *.bak DEADJOE
+ 
+ KVER	?= $(shell uname -r)
+ KNAME	?= $(shell uname -s)
+-KDIR	=/lib/modules/$(shell uname -r)/build
++KERNEL_SRC	?=/lib/modules/$(shell uname -r)/build
+ KVERBOSE=0
+ MODTYPE=ko
+ 
+@@ -22,14 +22,14 @@ VERBOSE		=0
+ AUSB_DIR	=$(PWD)
+ SRC_DIR		=$(PWD)/firmware
+ MOD_DIR		=$(PWD)/driver
+-INCLUDE_DIR =$(PWD)/include 
++INCLUDE_DIR =$(PWD)/include
+ OS_DIR		=$(PWD)/include/os
+ 
+ TARGETS=compile_amf_mod compile_amf_firmware
+ CLEANTARGETS=clean_amf_mod clean_amf_firmware  
+ INSTALLTARGETS=install_amf_mod
+ 
+-EXTRA_CFLAGS=$(GLOBAL_CFLAGS) -I$(KDIR)/include/linux -I$(INCLUDE_DIR) -I$(SRC_DIR) -I$(OS_DIR)
++EXTRA_CFLAGS=$(GLOBAL_CFLAGS) -I$(KERNEL_SRC)/include/linux -I$(INCLUDE_DIR) -I$(SRC_DIR) -I$(OS_DIR)
+ 
+ DEBFLAGS = -O
+ ifeq ($(DEBUG),y)
+@@ -57,16 +57,16 @@ EXTRA_CFLAGS += $(TESTFLAGS)
+ 
+ EXTRA_UTIL_FLAGS=$(GLOBAL_CFLAGS)
+ 
+-all: check-dahdi check-kernel $(TARGETS)
++all: $(TARGETS)
+ 
+ compile_amf_mod:
+-	$(MAKE) KBUILD_VERBOSE=$(KVERBOSE) -C $(KDIR) SUBDIRS=$(MOD_DIR) EXTRA_FLAGS="$(EXTRA_CFLAGS)" modules
++	$(MAKE) KBUILD_VERBOSE=$(KVERBOSE) -C $(KERNEL_SRC) SUBDIRS=$(MOD_DIR) EXTRA_FLAGS="$(EXTRA_CFLAGS)" modules
+ 
+ compile_amf_firmware:
+ 	$(MAKE) -C $(SRC_DIR) EXTRA_FLAGS="EXTRA_UTIL_FLAGS"  
+ 
+ clean_amf_mod:
+-	$(MAKE) -C $(KDIR) SUBDIRS=$(MOD_DIR) clean
++	$(MAKE) -C $(KERNEL_SRC) SUBDIRS=$(MOD_DIR) clean
+ 
+ clean_amf_firmware:
+ 	$(MAKE) -C $(SRC_DIR) clean
+@@ -78,22 +78,22 @@ install: $(INSTALLTARGETS)
+ 	$(shell depmod -a)
+ 
+ install_amf_mod:
+-	$(MAKE) -C $(KDIR) SUBDIRS=$(MOD_DIR) modules_install
++	$(MAKE) -C $(KERNEL_SRC) SUBDIRS=$(MOD_DIR) modules_install
+ 
+ #Check for linux headers
+ check-kernel: 
+-	@if [ ! -e $(KDIR) ]; then \
+-		echo "   Error linux headers/source not found: $(KDIR) !"; \
++	@if [ ! -e $(KERNEL_SRC) ]; then \
++		echo "   Error linux headers/source not found: $(KERNEL_SRC) !"; \
+ 		echo ; \
+ 		exit 1; \
+ 	fi 
+-	@if [ ! -e $(KDIR)/.config ]; then \
+-		echo "   Error linux headers/source not configured: missing $(KDIR)/.config !"; \
++	@if [ ! -e $(KERNEL_SRC)/.config ]; then \
++		echo "   Error linux headers/source not configured: missing $(KERNEL_SRC)/.config !"; \
+ 		echo ; \
+ 		exit 1; \
+ 	fi 
+-	@if [ ! -e $(KDIR)/include ]; then \
+-		echo "   Error linux headers/source incomplete: missing $(KDIR)/include dir !"; \
++	@if [ ! -e $(KERNEL_SRC)/include ]; then \
++		echo "   Error linux headers/source incomplete: missing $(KERNEL_SRC)/include dir !"; \
+ 		echo ; \
+ 		exit 1; \
+ 	fi

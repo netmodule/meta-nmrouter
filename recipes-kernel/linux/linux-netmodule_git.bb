@@ -37,5 +37,14 @@ do_install_append(){
     if [ "${KERNEL_IMAGETYPE}" = "uImage" ]; then
         ln -s ${KERNEL_IMAGETYPE}-${KERNEL_VERSION} ${D}/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}
     fi
+
+    # Module.symvers gets updated during the
+    # building of the kernel modules. We need to
+    # update this in the shared workdir since some
+    # external kernel modules has a dependency on
+    # other kernel modules and will look at this
+    # file to do symbol lookups
+    # THIS WILL BE FIXED IN FUTURE VERSIONS!
+    cp Module.symvers ${STAGING_KERNEL_BUILDDIR}/
 }
 
