@@ -6,7 +6,9 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4fbd65380cdd255951079008b364516c"
 
 SRCREV = "39be0a69e4b03907a947d957afe20d394179677e"
-SRC_URI = "git://github.com/cockpit-project/cockpit.git;protocol=https"
+SRC_URI = "git://github.com/cockpit-project/cockpit.git;protocol=https \
+           file://cockpit.pam \
+           "
 
 S = "${WORKDIR}/git"
 
@@ -21,6 +23,7 @@ INHIBIT_PACKAGE_STRIP = "1"
 FILES_${PN}_append = " \
 	/lib/* \
 	/usr/* \
+    /etc/* \
 	"
 
 do_configure() {
@@ -34,4 +37,7 @@ do_configure() {
 do_install() {
     sed -i "s#install-data-local:: doc/guide/html/index.html#bla-install-data-local:: doc/guide/html/index.html#" ./Makefile
     oe_runmake DESTDIR=${D} install
+
+    mkdir -p ${D}/etc/pam.d/
+    cp ${WORKDIR}/cockpit.pam ${D}/etc/pam.d/cockpit
 }
