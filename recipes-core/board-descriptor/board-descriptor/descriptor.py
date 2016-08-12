@@ -19,6 +19,35 @@ def _array_to_mac(data):
     return ':'.join('%02x' % b for b in data)
 
 
+def _array_to_partition(data):
+    import codecs
+    part = {
+        "flags": data[0],
+        "fstype": data[1],
+        "offset": int(codecs.encode(data[2:6], "hex"), 16),
+        "size": int(codecs.encode(data[6:10], "hex"), 16),
+        "name": data[10:].decode("utf-8")
+    }
+
+    return part
+
+    return _array_to_parition_gen(data, 4)
+
+
+def _array_to_partition64(data):
+    import codecs
+    part = {
+        "flags": data[0],
+        "fstype": data[1],
+        "fsoptions": data[3],
+        "offset": int(codecs.encode(data[8:16], "hex"), 16),
+        "size": int(codecs.encode(data[16:24], "hex"), 16),
+        "name": data[24:].decode("utf-8")
+    }
+
+    return part
+
+
 _string_to_type = {
     "String": _array_to_string,
     "Date": _array_to_string,
@@ -28,8 +57,8 @@ _string_to_type = {
     "UInt64": _array_to_int,
     "MAC": _array_to_mac,
     "IPV4": _array_to_string,
-    "Parition": _array_to_string,
-    "Parition64": _array_to_string,
+    "Partition": _array_to_partition,
+    "Partition64": _array_to_partition64,
     "Hash": _array_to_hash
 }
 
@@ -60,6 +89,28 @@ def _uint64_to_array(data):
     return _uint_to_array(data, "Q")
 
 
+def _dict_to_partition(data):
+    bd_data = bytearray()
+    bd_data.extend(_uint8_to_array(data["flags"]))
+    bd_data.extend(_uint8_to_array(data["fstype"]))
+    bd_data.extend(_uint32_to_array(data["offset"]))
+    bd_data.extend(_uint32_to_array(data["size"]))
+    bd_data.extend(_string_to_array(data["name"]))
+    return bd_data
+
+
+def _dict_to_partition64(data):
+    bd_data = bytearray()
+    bd_data.extend(_uint8_to_array(data["flags"]))
+    bd_data.extend(_uint8_to_array(data["fstype"]))
+    bd_data.extend(_uint8_to_array(data["fsoptions"]))
+    bd_data.extend([0]*5)
+    bd_data.extend(_uint64_to_array(data["offset"]))
+    bd_data.extend(_uint64_to_array(data["size"]))
+    bd_data.extend(_string_to_array(data["name"]))
+    return bd_data
+
+
 def _not_supported_yet(data):
     raise NotImplementedError("Setting this type is not supported yet")
 
@@ -72,8 +123,8 @@ _type_to_value = {
     "UInt64": _uint64_to_array,
     "MAC": _not_supported_yet,
     "IPV4": _string_to_array,
-    "Parition": _string_to_array,
-    "Parition64": _string_to_array,
+    "Partition": _dict_to_partition,
+    "Partition64": _dict_to_partition64,
     "Hash": _not_supported_yet
 }
 
@@ -173,8 +224,13 @@ class Descriptor:
         tlv_by_name = {}
         for tlv in bdraw.tlvs:
             name, value = self._get_name_value(tlv)
-            bdparsed[name] = value
-            tlv_by_name[name] = tlv
+            key = name
+            i = 1
+            while key in bdparsed:
+                key = name + "_" + str(i)
+                i = i + 1
+            bdparsed[key] = value
+            tlv_by_name[key] = tlv
 
         return bdparsed, tlv_by_name
 
@@ -186,7 +242,15 @@ class Descriptor:
         return self.bdparsed
 
     def get(self, name):
-        return self.bdparsed[name]
+        name = name.split(".")
+        element = self.bdparsed
+        # Search the final element to print
+        # This allows names in the form parition64.flags
+        for key in name:
+            if not key in element:
+                return None
+            element = element[key]
+        return element
 
     def _write_bd(self, pos, data, maxlen):
         fd = open(self.file, "r+b")
@@ -194,29 +258,54 @@ class Descriptor:
         fd.write(data[0:maxlen])
         fd.close()
 
+    def _update_dict(self, dictionary, element_to_change, value):
+        # We are at the end of all elements, so change value
+        if len(element_to_change) == 1:
+            dictionary[element_to_change[0]] = value
+        else:
+            # Create new dicitionary with changed elememts
+            dictionary[element_to_change[0]] = self._update_dict(
+                dictionary[element_to_change[0]], element_to_change[1:], value)
+        return dictionary
+
     def _do_set(self, name, value, tlv):
         for key, config_item in self.config_table.items():
             if tlv.tag == config_item["id"]:
-                type = config_item["type"]
+                tlv_type = config_item["type"]
                 break
 
-        if type is None:
-            raise ValueError("Could not found tag type")
+        if tlv_type is None:
+            raise ValueError("Could not find tag type")
 
         for key, fun in _type_to_value.items():
-            if key == type:
-                self._write_bd(tlv.pos, fun(value), tlv.length)
+            if key == tlv_type:
+                if not type(name) is list:
+                    self._write_bd(tlv.pos, fun(value), tlv.length)
+                else:
+                    element = self.bdparsed[name[0]]
+                    # if we have changed the element it will be our value again
+                    value = self._update_dict(element, name[1:], value)
+                    self._write_bd(tlv.pos, fun(value), tlv.length)
+                self.bdparsed[name[0]] = value
 
     def set(self, name, value):
         if self.tlv_by_name is None:
             raise ImportError("Descriptor not read yet, run read_all first")
 
-        tlv = self.tlv_by_name.get(name)
+        name = name.split(".")
+
+        tlv = self.tlv_by_name.get(name[0])
         if tlv is None:
             return False
 
         if not self.bdraw.is_writable:
             raise IOError("This operation is not permitted on "
                           "this descriptor (ro)")
+
+        # if it's not a name in the form partition.flags then
+        # we don't use name as array
+        if len(name) == 1:
+            name = name[0]
+
         self._do_set(name, value, tlv)
         return True

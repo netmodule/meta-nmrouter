@@ -12,74 +12,112 @@ def read_config(config_file):
     return json.loads(config)
 
 
-def read_all(bd):
-    for key, value in bd.items():
-        print ("{0}: {1}".format(key, value))
+def read_all(descs, args=None):
+    for desc in descs:
+        for key, value in desc.get_list().items():
+            print ("{0}: {1}".format(key, value))
 
 
-def read_key(bd, key):
-    print(bd[key])
+def read_key(descs, args):
+    key = args[0]
+    value = None
+    for desc in descs:
+        value = desc.get(key)
+        if value is not None:
+            break
+    print(value)
+
+
+def write_key(descs, args):
+    value_updated = False
+    if len(args) == 0:
+        raise ValueError("Invalid argument to write")
+
+    key_value = args[0]
+    [key, value] = key_value.split("=")
+    for desc in descs:
+        if desc.set(key, value):
+            value_updated = True
+            break
+
+    if not value_updated:
+        raise ValueError("Key not found or invalid value")
+
+cmd_table = {
+    "read": read_key,
+    "write": write_key,
+    "read-all": read_all
+}
+
+
+def read_descriptors(config):
+    import descriptor
+
+    # Read the tag -> name -> type list
+    fd = open(config["tag_list"], "r")
+    config_table = fd.read()
+
+    descs = []
+    for eeprom in config["eeprom"]:
+        for valid_bd in eeprom["valid_bds"]:
+            desc = descriptor.Descriptor(eeprom["path"],
+                                         valid_bd["start"],
+                                         valid_bd["size"],
+                                         config_table)
+            desc.read()
+            descs.append(desc)
+    return descs
 
 
 def main():
-    import descriptor
-
-    usage = "usage: %prog [options] arg"
+    usage = "usage: %prog [options] read/read-all/write\n\n"
+    usage = usage + "Commands:\n"
+    usage = usage + "  read <key>: reads the value of a descriptor entry\n"
+    usage = usage + "  write <key>=<value>: write the value to a descriptor,\n"
+    usage = usage + "                       key can be partition64.flags\n"
+    usage = usage + "  read-all: read all values from the descriptor"
     parser = OptionParser(usage)
     parser.add_option("-c", "--config", action="store", type="string",
                       dest="config",
                       help="Configuration file to load",
                       default="/etc/bd/config.json")
 
-    parser.add_option("-a", "--read-all", action="store_true", dest="read_all",
-                      help="Read everything from the boarddescriptors",
-                      default=False)
-
-    parser.add_option("-r", "--read-key", action="store", dest="read_key",
-                      type="string",
-                      help="Read key from the boarddescritpors",
-                      default=None)
-
-    parser.add_option("-w", "--write-key", action="store", dest="write_key",
-                      type="string",
-                      help="Try to write key to boarddescriptor",
-                      default=None)
-
-    parser.add_option("-v", "--write-value", action="store", dest="write_val",
-                      type="string",
-                      help="Value to write if -w (must be specified)",
-                      default=None)
-
     (options, args) = parser.parse_args()
 
-    config = read_config(options.config)
+    try:
+        config = read_config(options.config)
 
-    # Read the tag -> name -> type list
-    fd = open(config["tag_list"], "r")
-    config_table = fd.read()
+        if len(sys.argv) < 2:
+            parser.print_help()
 
-    bd = {}
-    descs = []
-    for eeprom in config["eeprom"]:
-        for valid_bd in eeprom["valid_bds"]:
-            desc = descriptor.Descriptor(eeprom["path"], valid_bd["start"],
-                                         valid_bd["size"], config_table)
-            desc.read()
-            bd.update(desc.get_list())
-            descs.append(desc)
+        cmd = sys.argv[1]
+        if cmd not in cmd_table:
+            parser.print_help()
 
-    if options.read_all:
-        read_all(bd)
+        descs = read_descriptors(config)
 
-    if options.read_key is not None:
-        read_key(bd, options.read_key)
-
-    if options.write_key is not None:
-        if options.write_val is None:
-            print("No value write specified, please set -v")
-            sys.exit(10)
-        for desc in descs:
-            desc.set(options.write_key, options.write_val)
+        for cmd_name, fun in cmd_table.items():
+            if cmd_name == cmd:
+                fun(descs, sys.argv[2:])
+                break
+    except ValueError as ex:
+        print("")
+        print("Invalid syntax:")
+        print(ex.message)
+        print("")
+        parser.print_help()
+    except:
+        print("")
+        print("Boarddescriptor operation failed with:")
+        exc_type, exc_obj, exc_traceback = sys.exc_info()
+        print((exc_type, exc_obj))
+        traceback_details = {
+            'filename': exc_traceback.tb_frame.f_code.co_filename,
+            'lineno': exc_traceback.tb_lineno,
+            'name': exc_traceback.tb_frame.f_code.co_name,
+            'type': exc_type.__name__,
+            }
+        print(traceback_details)
 
 
 if __name__ == "__main__":
