@@ -17,7 +17,8 @@ source /etc/default/sw_update_config
 log() {
   local level=${1?}
   shift
-  local code= line="[$(date '+%F %T')] $level: $*"
+  local code=
+  local line="[$(date '+%F %T')] $level: $*"
   if [ -t 2 ]
   then
     case "$level" in
@@ -190,18 +191,44 @@ check_file()
   fi
 }
 
+get_bin()
+{
+  echo $(dd if=$IMAGE_LOCATION bs=1 count=$2 skip=$1 2>/dev/null | hexdump -ve '1/1 "%.2x"')
+}
+
 update_linux()
 {
   log INFO "Starting linux update ..."
   check_file $1
 
-  #extract_header_infos
-  #check_image_compatibility
+  head=$(get_bin 0 2)
+  if [ "a$head" == "a1f8b" ]; then
+    log INFO "Found valid gzip archive"
+    # gzip header found, normal image
+    # Don't use the header stuff for now, move the file instead
+    EXTRACTED_IMAGE=$IMAGE_LOCATION
+  else
+    log INFO "Search gzip archive in image"
+    for i in $(seq 0 1024); do
+      head=$(get_bin $i 2)
+      if [ "a$head" == "a1f8b" ]; then
+        log INFO "Found gzip archive in image, extracting now"
+        EXTRACTED_IMAGE=$(mktemp)
+        dd if=$IMAGE_LOCATION bs=$i skip=1 of=$EXTRACTED_IMAGE 2>/dev/null
+        break
+      fi
+    done
+    test $i -eq 1024 && echo "Could not find a vaild gzip archive" && exit -1
+  fi
+
+  # This is not the original sw-update, we use plain tar.gz
+  # extract_header_infos
+  # check_image_compatibility
   # extract_image
-  # Don't use the header stuff for now, move the file instead
-  EXTRACTED_IMAGE=$IMAGE_LOCATION
   # Also don't check the md5 sum
   # check_image_md5
+  log INFO "Installing linux update ..."
+
   flash_firmware
   cleanup
 
