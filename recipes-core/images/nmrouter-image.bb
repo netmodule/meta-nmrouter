@@ -38,6 +38,7 @@ IMAGE_INSTALL_append = " \
                 kernel-devicetree \
                 python-subprocess \
                 networkmanager \
+                modemmanager \
                 cockpit \
                 board-descriptor \
                 sw-update \
