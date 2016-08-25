@@ -50,6 +50,7 @@ IMAGE_INSTALL_cortex9hf_append = " kernel-devicetree "
 IMAGE_INSTALL_append_am335x-nbhw16 = " \
                 nbhw16-ctrl \
                 tibluetooth \
+                bluez5-obex \
                 "
 
 LICENSE = "BSD"

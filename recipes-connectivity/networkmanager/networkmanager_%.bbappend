@@ -1,1 +1,1 @@
-PACKAGECONFIG_append = " modemmanager"
+PACKAGECONFIG_append = " modemmanager bluez5"
