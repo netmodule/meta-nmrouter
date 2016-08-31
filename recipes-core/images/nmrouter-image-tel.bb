@@ -5,4 +5,6 @@ IMAGE_INSTALL_append = " \
                 dahdi-linux \
                 dahdi-tools \
                 amfeltec-usb \
+                php \
+                lighttpd \
                 "
