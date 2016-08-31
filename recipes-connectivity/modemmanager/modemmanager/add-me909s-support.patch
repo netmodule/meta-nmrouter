@@ -1,0 +1,11 @@
+--- a/plugins/huawei/77-mm-huawei-net-port-types.rules	2016-08-23 17:49:52.791022448 +0200
++++ b/plugins/huawei/77-mm-huawei-net-port-types.rules	2016-08-23 17:50:02.675217020 +0200
+@@ -11,6 +11,8 @@
+ SUBSYSTEMS=="usb", ATTRS{bInterfaceClass}=="ff", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="02", ENV{ID_MM_HUAWEI_AT_PORT}="1"
+ SUBSYSTEMS=="usb", ATTRS{bInterfaceClass}=="ff", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="01", ENV{ID_MM_HUAWEI_MODEM_PORT}="1"
+ SUBSYSTEMS=="usb", ATTRS{bInterfaceClass}=="ff", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="02", ENV{ID_MM_HUAWEI_AT_PORT}="1"
++SUBSYSTEMS=="usb", ATTRS{bInterfaceClass}=="ff", ATTRS{bInterfaceSubClass}=="06", ATTRS{bInterfaceProtocol}=="10", ENV{ID_MM_HUAWEI_MODEM_PORT}="1"
++SUBSYSTEMS=="usb", ATTRS{bInterfaceClass}=="ff", ATTRS{bInterfaceSubClass}=="06", ATTRS{bInterfaceProtocol}=="12", ENV{ID_MM_HUAWEI_AT_PORT}="1"
+ 
+ # GPS NMEA port on MU609
+ SUBSYSTEMS=="usb", ATTRS{bInterfaceClass}=="ff", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="05", ENV{ID_MM_HUAWEI_GPS_PORT}="1"
