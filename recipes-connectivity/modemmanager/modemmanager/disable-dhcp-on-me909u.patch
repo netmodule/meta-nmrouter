@@ -1,0 +1,82 @@
+diff --git a/plugins/huawei/77-mm-huawei-net-port-types.rules b/plugins/huawei/77-mm-huawei-net-port-types.rules
+index f60f1f8..d35f2d5 100644
+--- a/plugins/huawei/77-mm-huawei-net-port-types.rules
++++ b/plugins/huawei/77-mm-huawei-net-port-types.rules
+@@ -6,6 +6,9 @@ ENV{ID_VENDOR_ID}!="12d1", GOTO="mm_huawei_port_types_end"
+ # MU609 does not support getportmode (crashes modem with default firmware)
+ ATTRS{idProduct}=="1573", ENV{ID_MM_HUAWEI_DISABLE_GETPORTMODE}="1"
+ 
++# MU909u does not support DHCP properly, it can happen that the Ethernet frames do not attach the Ethernet header afterwards.
++ATTRS{idProduct}=="1573", ENV{ID_MM_HUAWEI_DISABLE_DHCP}="1"
++
+ # Mark the modem and at port flags for ModemManager
+ SUBSYSTEMS=="usb", ATTRS{bInterfaceClass}=="ff", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="01", ENV{ID_MM_HUAWEI_MODEM_PORT}="1"
+ SUBSYSTEMS=="usb", ATTRS{bInterfaceClass}=="ff", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="02", ENV{ID_MM_HUAWEI_AT_PORT}="1"
+diff --git a/plugins/huawei/mm-broadband-bearer-huawei.c b/plugins/huawei/mm-broadband-bearer-huawei.c
+index 60a91e5..11782c3 100644
+--- a/plugins/huawei/mm-broadband-bearer-huawei.c
++++ b/plugins/huawei/mm-broadband-bearer-huawei.c
+@@ -465,17 +465,34 @@ connect_3gpp_context_step (Connect3gppContext *ctx)
+                                        g_object_ref (ctx->self));
+         return;
+ 
+-    case CONNECT_3GPP_CONTEXT_STEP_IP_CONFIG:
+-        mm_base_modem_at_command_full (ctx->modem,
+-                                       ctx->primary,
+-                                       "^DHCP?",
+-                                       3,
+-                                       FALSE,
+-                                       FALSE,
+-                                       NULL,
+-                                       (GAsyncReadyCallback)connect_dhcp_check_ready,
+-                                       g_object_ref (ctx->self));
+-        return;
++    case CONNECT_3GPP_CONTEXT_STEP_IP_CONFIG: {
++        GUdevClient *client;
++        GUdevDevice *data_device;
++
++        // ME909u has a problem with DHCP over AT. If it's done right after NDSIDUP
++        // the modem doesn't send the Ethernet header anymore which confuses the network stack
++        client = g_udev_client_new (NULL);
++        data_device = (g_udev_client_query_by_subsystem_and_name (
++                           client,
++                           "tty",
++                           mm_port_get_device (&ctx->primary->parent.parent)));
++        if (!data_device || !g_udev_device_get_property_as_boolean (data_device, "ID_MM_HUAWEI_DISABLE_DHCP")) {
++            mm_base_modem_at_command_full (ctx->modem,
++                                           ctx->primary,
++                                           "^DHCP?",
++                                           3,
++                                           FALSE,
++                                           FALSE,
++                                           NULL,
++                                           (GAsyncReadyCallback)connect_dhcp_check_ready,
++                                           g_object_ref (ctx->self));
++            return;
++        }
++
++        mm_info("This device (%s) does not support DHCP over AT", mm_port_get_device (ctx->data));
++        ctx->step ++;
++        /* Fall down to the next step */
++    }
+ 
+     case CONNECT_3GPP_CONTEXT_STEP_LAST:
+         /* Clear context */
+@@ -489,6 +506,17 @@ connect_3gpp_context_step (Connect3gppContext *ctx)
+                     mm_bearer_connect_result_new (ctx->data, ctx->ipv4_config, NULL),
+                     (GDestroyNotify)mm_bearer_connect_result_unref);
+             }
++            else {
++                MMBearerIpConfig *ipv4_config;
++
++                ipv4_config = mm_bearer_ip_config_new ();
++                mm_bearer_ip_config_set_method (ipv4_config, MM_BEARER_IP_METHOD_DHCP);
++                g_simple_async_result_set_op_res_gpointer (
++                    ctx->result,
++                    mm_bearer_connect_result_new (ctx->data, ipv4_config, NULL),
++                    (GDestroyNotify)mm_bearer_connect_result_unref);
++                g_object_unref (ipv4_config);
++            }
+         }
+ 
+         connect_3gpp_context_complete_and_free (ctx);

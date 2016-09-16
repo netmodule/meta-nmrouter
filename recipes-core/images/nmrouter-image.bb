@@ -42,6 +42,7 @@ IMAGE_INSTALL_append = " \
                 cockpit \
                 board-descriptor \
                 sw-update \
+                python-pip \
                 ${FIRMWARE} \
                 "
 
@@ -51,6 +52,8 @@ IMAGE_INSTALL_append_am335x-nbhw16 = " \
                 nbhw16-ctrl \
                 tibluetooth \
                 bluez5-obex \
+                bluez5-noinst-tools \
+                python-pygattlib \
                 "
 
 LICENSE = "BSD"
