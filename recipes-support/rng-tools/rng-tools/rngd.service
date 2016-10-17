@@ -1,0 +1,11 @@
+[Unit]
+Description=Random number generator
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/rngd
+PIDFile=/var/run/rngd.pid
+KillSignal=SIGQUIT
+
+[Install]
+WantedBy=multi-user.target
