@@ -43,6 +43,7 @@ IMAGE_INSTALL_append = " \
                 board-descriptor \
                 sw-update \
                 python-pip \
+                rng-tools \
                 ${FIRMWARE} \
                 "
 
