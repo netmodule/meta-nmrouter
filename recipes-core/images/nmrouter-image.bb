@@ -11,8 +11,6 @@ IMAGE_FEATURES_append = " \
                 ssh-server-openssh \
                 "
 
-PREFERED_VERSION-pn_nodejs = "4.4.5"
-
 FIRMWARE ?= "linux-firmware"
 FIRMWARE_am335x-nbhw16 = " \
                 linux-firmware-ath6k \
@@ -39,11 +37,14 @@ IMAGE_INSTALL_append = " \
                 python-subprocess \
                 networkmanager \
                 modemmanager \
-                cockpit \
                 board-descriptor \
                 sw-update \
                 python-pip \
                 rng-tools \
+                glibc-utils \
+                glibc-gconv \
+                glibc-gconv-utf-16 \
+                glibc-gconv-utf-32 \
                 ${FIRMWARE} \
                 "
 

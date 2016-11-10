@@ -31,5 +31,7 @@ IMAGE_INSTALL_append = " \
                 lrzsz \
                 ${BENCH_TOOLS} \
                 ${EASY_EDITOR} \
+                python3 \
+                python3-misc \
                 "
 
