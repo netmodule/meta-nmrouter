@@ -1,0 +1,13 @@
+diff --git a/libloragw/src/loragw_reg.c b/libloragw/src/loragw_reg.c
+index 7fe0f67..dc90d93 100644
+--- a/libloragw/src/loragw_reg.c
++++ b/libloragw/src/loragw_reg.c
+@@ -48,7 +48,7 @@ Maintainer: Sylvain Miermont
+ #define PAGE_ADDR        0x00
+ #define PAGE_MASK        0x03
+ 
+-const uint8_t FPGA_VERSION[] = { 27 }; /* several versions could be supported */
++const uint8_t FPGA_VERSION[] = { 27, 28 }; /* several versions could be supported */
+ 
+ /*
+ auto generated register mapping for C code : 11-Jul-2013 13:20:40

@@ -1,0 +1,80 @@
+#!/bin/bash
+
+NAME="lora-network-server"
+ENABLED="yes"
+
+START_STOP_DAEMON="/usr/sbin/start-stop-daemon"
+
+[ -f /etc/default/$NAME ] && source /etc/default/$NAME
+
+run_dir=/var/run/lora
+conf_dir=/var/config/lora
+conf_file=/opt/lora/lora-network-server.conf
+conf_db=$conf_dir/lora-network-server.db
+
+net_server=/opt/lora/lora-network-server
+net_server_log=/var/log/lora-network-server.log
+net_server_pidfile=$run_dir/$NAME.pid
+
+pkt_fwd=/opt/lora/lora_pkt_fwd
+pkt_fwd_pidfile=$run_dir/lora-pkt-fwd-1.pid
+
+do_start() {
+    if ! [ -f $conf_file ]; then
+        echo "$0: $conf_file missing"
+        exit 1
+    fi
+
+    echo -n "Starting $NAME: "
+    mkdir -p $run_dir/1
+    # start network server
+    $START_STOP_DAEMON --start --background --make-pidfile \
+        --pidfile $net_server_pidfile --startas /bin/bash \
+        --chdir "/opt/lora" -- -c "exec $net_server \
+        -c $conf_file --lora-path $run_dir --db $conf_db \
+        --noconsole -l $net_server_log  >> $net_server_log 2>&1"
+    sleep 2
+    # start packet forwarder
+    $START_STOP_DAEMON --start --background --make-pidfile \
+        --pidfile $pkt_fwd_pidfile --exec $pkt_fwd --chdir "/opt/lora/"
+
+    renice -n -20 -p $(pgrep lora-network-se)
+    renice -n -20 -p $(pgrep $(basename $pkt_fwd))
+
+    echo "OK"
+}
+
+do_stop() {
+    echo -n "Stopping $NAME: "
+    $START_STOP_DAEMON --stop --quiet --oknodo --pidfile $net_server_pidfile --retry 15
+    $START_STOP_DAEMON --stop --quiet --oknodo --pidfile $pkt_fwd_pidfile --retry 5
+    rm -f $net_server_pidfile $pkt_fwd_pidfile
+    echo "OK"
+}
+
+if [ "$ENABLED" != "yes" ]; then
+    echo "$NAME: disabled in /etc/default"
+    exit
+fi
+
+case "$1" in
+    "start")
+        do_start
+        ;;
+    "stop")
+        do_stop
+        ;;
+    "restart")
+        ## Stop the service and regardless of whether it was
+        ## running or not, start it again.
+        do_stop
+        do_start
+        ;;
+    *)
+        ## If no parameters are given, print which are avaiable.
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+
+

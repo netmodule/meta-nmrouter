@@ -9,6 +9,16 @@ branch: jethro
 revision: HEAD
 layers: meta-python, meta-oe, meta-networking
 
+For images that contain NodeJS extensions:
+URI: https://github.com/imyller/meta-nodejs.git
+branch : jethro
+revision: HEAD
+
+URI: https://github.com/imyller/meta-nodejs-contrib.git
+branch: jethro
+revision: HEAD
+
+
 To get an image that is compatible with the NetModule router, build an nmrouter-image. Set the MACHINE in conf/local.conf to 
 MACHINE ??= "armada-385-nbhw17-nb2800" or
 MACHINE ??= "am335x-nbhw16"
