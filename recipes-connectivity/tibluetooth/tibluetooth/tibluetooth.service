@@ -7,7 +7,7 @@ Type=forking
 ExecStartPre=-/bin/sh -c "/bin/echo 100 > /sys/class/gpio/export"
 ExecStartPre=-/bin/sh -c "/bin/echo out > /sys/class/gpio/gpio100/direction"
 ExecStartPre=/bin/sh -c "/bin/echo 1 > /sys/class/gpio/gpio100/value"
-ExecStart=/usr/bin/hciattach /dev/ttyO5 texas 3000000 flow
+ExecStart=/usr/bin/hciattach /dev/ttyS5 texas 3000000 flow
 
 ExecStopPost=/bin/sh -c "/bin/echo 0 > /sys/class/gpio/gpio100/value"
 
