@@ -8,9 +8,12 @@ DEPENDS = "libnl dbus dbus-glib libgudev wireless-tools nss util-linux libndp"
 
 inherit gnome gettext systemd
 
+INITIAL_CONNECTION = "ethernet-2a2b6485-4d06-4b86-8051-751399c6881a"
+
 SRC_URI = " \
     ${GNOME_MIRROR}/NetworkManager/${@gnome_verdir("${PV}")}/NetworkManager-${PV}.tar.xz \
     file://0001-don-t-try-to-run-sbin-dhclient-to-get-the-version-nu.patch \
+    file://${INITIAL_CONNECTION} \
 "
 SRC_URI[md5sum] = "337e676261ca94af08f8e9b6f9b09a5b"
 SRC_URI[sha256sum] = "c4d5e075998a291074501602a5068a7e54d9e0f2658aba079d58145d65be531d"
@@ -58,6 +61,7 @@ FILES_${PN} += " \
     ${datadir}/dbus-1 \
     ${base_libdir}/udev/* \
     ${systemd_unitdir}/system \
+    ${sysconfdir} \
 "
 
 RRECOMMENDS_${PN} += "iptables dnsmasq"
@@ -87,4 +91,6 @@ SYSTEMD_SERVICE_${PN} = "NetworkManager.service"
 
 do_install_append() {
     rm -rf ${D}/run ${D}${localstatedir}/run
+    mkdir -p ${D}${sysconfdir}/NetworkManager/system-connections
+    cp ${WORKDIR}/${INITIAL_CONNECTION} ${D}${sysconfdir}/NetworkManager/system-connections/
 }
