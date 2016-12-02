@@ -47,7 +47,7 @@ do_install() {
 
 PACKAGES += "${PN}-utils ${PN}-utils-dbg"
 
-FILES_${PN}-utils = "/opt/lora/*"
+FILES_${PN}-utils = "/opt/lora/* /lib"
 FILES_${PN}-utils-dbg = "/opt/lora/.debug"
 FILES_${PN}-dev = "${includedir}/lora ${libdir}/lora/library.cfg"
 FILES_${PN}-staticdev = "${libdir}/lora/libloragw.a"

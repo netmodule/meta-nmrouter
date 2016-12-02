@@ -1,7 +1,14 @@
 {
-    "gateway_conf": {
-        "server_address": "localhost",
-        "serv_port_up": 1780,
-        "serv_port_down": 1782
-    }
+  "gateway_conf": {
+    "server_address": "192.168.1.2",
+    "serv_port_up": 1700,
+    "serv_port_down": 1700,
+    "serv_enabled": true,
+    "fake_gps": true,
+    "ref_latitude": 47.142879,
+    "ref_longitude": 7.244233,
+    "ref_altitude": 481,
+    "contact_email": "mail@example.net",
+    "description": "NetModule LoRaWAN Gateway #1"
+  }
 }

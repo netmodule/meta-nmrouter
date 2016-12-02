@@ -8,6 +8,11 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=22af7693d7b76ef0fc76161c4be76c45"
 DEPENDS = "lora-gateway"
 PR = "r10"
 
+inherit systemd
+
+SYSTEMD_SERVICE_${PN} = "lora.service"
+SYSTEMD_AUTO_ENABLE ?= "enable"
+
 # tag v1.4.1
 SRCREV = "0011a60759a7d81656a5393e97089daab1ff1a81"
 
@@ -19,6 +24,10 @@ SRC_URI = "git://github.com/Lora-net/packet_forwarder.git;protocol=git \
            file://lora-packet-forwarder-mts-enhancements.patch \
            file://lora-packet-forwarder-synch-word.patch \
            file://lora-packet-forwarder-add-queue.patch \
+           file://global_conf.json \
+           file://local_conf.json \
+           file://start-lora.sh \
+           file://lora.service\
            file://README.md \
 "
 
@@ -44,9 +53,12 @@ do_install() {
 	install -m 755 util_ack/util_ack ${D}${LORA_DIR}/
 	install -m 755 ${WORKDIR}/README.md  ${D}${LORA_DIR}/
 
+	install -d ${D}${systemd_unitdir}/system
+    install -m 0644 ${WORKDIR}/global_conf.json ${D}/opt/lora/
+    install -m 0644 ${WORKDIR}/local_conf.json ${D}/opt/lora/
+    install -m 0644 ${WORKDIR}/lora.service ${D}${systemd_unitdir}/system
 
-#   skip util_tx_test since it conflicts with one in lora-gateway
-#	install -m 755 util_tx_test/util_tx_test ${D}${LORA_DIR}/
+    install -m 0755 ${WORKDIR}/start-lora.sh ${D}/opt/lora/
 }
 
 FILES_${PN} += "${LORA_DIR}"
