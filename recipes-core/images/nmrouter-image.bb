@@ -18,6 +18,10 @@ FIRMWARE_am335x-nbhw16 = " \
                 linux-firmware-wl12xx\
                 linux-firmware-wl18xx\
                 "
+FIRMWARE_armada-385 = " \
+                linux-firmware-ath6k \
+                linux-firmware-ath9k \
+                "
 
 IMAGE_INSTALL_append = " \
                 hostapd \
@@ -45,6 +49,7 @@ IMAGE_INSTALL_append = " \
                 glibc-gconv \
                 glibc-gconv-utf-16 \
                 glibc-gconv-utf-32 \
+                bridge-utils \
                 ${FIRMWARE} \
                 "
 
