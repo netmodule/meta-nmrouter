@@ -9,7 +9,7 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
 BRANCH ?= "master"
-SRC_URI = "git://gitolite@git/usr/se/linux;protocol=ssh;branch=${BRANCH}"
+SRC_URI = "git://git@gitlab.com:eichest/meta-nmrouter.git;protocol=ssh;branch=${BRANCH}"
 
 SRCREV ?= "${AUTOREV}"
 PV ?= "4.5-${SRCPV}"
