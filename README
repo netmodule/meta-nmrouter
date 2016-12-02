@@ -20,9 +20,20 @@ revision: HEAD
 
 
 To get an image that is compatible with the NetModule router, build an nmrouter-image. Set the MACHINE in conf/local.conf to 
-MACHINE ??= "armada-385-nbhw17-nb2800" or
-MACHINE ??= "am335x-nbhw16"
-and add this layer to conf/bblayers.conf
+MACHINE = "armada-385-nbhw17-nb2800" or
+MACHINE = "am335x-nbhw16" # AKA NB800
+and add the following layers to conf/bblayers.conf:
+BBLAYERS ?= " \
+  <poky dir>/meta \
+  <poky dir>/meta-yocto \
+  <poky dir>/meta-nmrouter \
+  <poky dir>/meta-telephony \
+  <poky dir>/meta-nodejs \
+  <poky dir>/meta-nodejs-contrib \
+  <poky dir>/meta-openembedded/meta-python \
+  <poky dir>/meta-openembedded/meta-oe \
+  <poky dir>/meta-openembedded/meta-networking \
+  "
 
 NB2800:
     While the NetModule router is running under the original software you have to do the following steps:
@@ -122,8 +133,8 @@ NB2800:
 
 NB800:
     - To update the software you can do a sw-update.sh -l <rootfs.tar.gz>
-    - To change the active boot partition do a bd -w boot_part -v <0/1>
-    - To connect trough a Swisscom SIM do a nbhw16-ctrl -m, check /usr/bin/nbhw16-ctrl for more details and other providers
+    - To read and write to the board descriptor use bd read/read-all/write
+    - To connect configure the modem and network interface use mmcli and nmcli (ModemManager and NetworkManager)
 
 For questions, send an email to <stefan.eichenberger@netmodule.com>
 
