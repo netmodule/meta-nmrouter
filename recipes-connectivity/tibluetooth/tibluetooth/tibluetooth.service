@@ -1,6 +1,7 @@
 [Unit]
 Description=Attach ti bluetooth
 Before=bluetooth
+Requires=bluetooth.target
 
 [Service]
 Type=forking
