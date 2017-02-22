@@ -1,0 +1,14 @@
+inherit image
+
+LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=4d92cd373abda3937c2bc47fbc49d690 \
+                    file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
+
+SUMMARY = "nmcontainer image minimal python3"
+
+IMAGE_INSTALL = " \
+                python3 \
+                bluez5 \
+                "
+
+LICENSE = "MIT"
+
