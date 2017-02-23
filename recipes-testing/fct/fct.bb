@@ -11,6 +11,10 @@ RDEPENDS_${PN}_append = " \
     python3-shell \
     python3-compression \
     python3-crypt \
+    python3-pkgutil \
+    python3-netclient \
+    python3-importlib \
+    python3-pydoc \
     libpython3 \
     "
 
