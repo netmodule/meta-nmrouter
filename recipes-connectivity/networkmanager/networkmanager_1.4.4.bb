@@ -15,8 +15,8 @@ SRC_URI = " \
     file://0001-don-t-try-to-run-sbin-dhclient-to-get-the-version-nu.patch \
     file://${INITIAL_CONNECTION} \
 "
-SRC_URI[md5sum] = "337e676261ca94af08f8e9b6f9b09a5b"
-SRC_URI[sha256sum] = "c4d5e075998a291074501602a5068a7e54d9e0f2658aba079d58145d65be531d"
+SRC_URI[md5sum] = "63f1e0d6d7e9099499d062c84c927a75"
+SRC_URI[sha256sum] = "829378f318cc008d138a23ca6a9191928ce75344e7e47a2f2c35f4ac82133309"
 
 S = "${WORKDIR}/NetworkManager-${PV}"
 
