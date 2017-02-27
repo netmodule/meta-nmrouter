@@ -92,5 +92,5 @@ SYSTEMD_SERVICE_${PN} = "NetworkManager.service"
 do_install_append() {
     rm -rf ${D}/run ${D}${localstatedir}/run
     mkdir -p ${D}${sysconfdir}/NetworkManager/system-connections
-    cp ${WORKDIR}/${INITIAL_CONNECTION} ${D}${sysconfdir}/NetworkManager/system-connections/
+    install -m 0600 ${WORKDIR}/${INITIAL_CONNECTION} ${D}${sysconfdir}/NetworkManager/system-connections/
 }
