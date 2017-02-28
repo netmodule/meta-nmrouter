@@ -1,11 +1,8 @@
 SUMMARY = "Universal Boot Loader for embedded devices"
 HOMEPAGE = "http://www.denx.de/wiki/U-Boot/WebHome"
-SECTION = "bootloaders"
-PROVIDES = "virtual/bootloader"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
-
 
 S = "${WORKDIR}/git"
 
@@ -32,7 +29,7 @@ UBOOT_LOCALVERSION ?= ""
 UBOOT_SUFFIX ??= "bin"
 UBOOT_IMAGE ?= "u-boot-${MACHINE}-${PV}-${PR}.${UBOOT_SUFFIX}"
 UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
-UBOOT_SYMLINK ?= "u-boot-${MACHINE}.${UBOOT_SUFFIX}"
+UBOOT_SYMLINK ?= "${PN}.${UBOOT_SUFFIX}"
 UBOOT_MAKE_TARGET ?= "all"
 
 # Output the ELF generated. Some platforms can use the ELF file and directly
@@ -50,7 +47,7 @@ UBOOT_ELF_SYMLINK ?= "u-boot-${MACHINE}.${UBOOT_ELF_SUFFIX}"
 # to allow packaging the SPL.
 SPL_BINARY ?= ""
 SPL_IMAGE ?= "${SPL_BINARY}-${MACHINE}-${PV}-${PR}"
-SPL_SYMLINK ?= "${SPL_BINARY}-${MACHINE}"
+SPL_SYMLINK ?= "${SPL_BINARY}-${PN}"
 
 # Additional environment variables or a script can be installed alongside
 # u-boot to be used automatically on boot.  This file, typically 'uEnv.txt'
