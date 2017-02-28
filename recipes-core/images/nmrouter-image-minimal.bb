@@ -12,7 +12,7 @@ NO_RECOMMENDATIONS = "1"
 
 IMAGE_INSTALL = " \
     packagegroup-core-boot \
-    e2fsprogs \
+    e2fsprogs-mke2fs \
     devmem2 \
     util-linux-agetty \
     systemd-serialgetty \
