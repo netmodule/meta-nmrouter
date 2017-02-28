@@ -56,6 +56,8 @@
     "pd_sim":                   { "id": 4122, "type": "String"},
     "pd_led":                   { "id": 4123, "type": "String"},
     "pd_usbhost":               { "id": 4124, "type": "String"},
+    "pd_dev_tree":              { "id": 4125, "type": "String"},
+    "patch_ver":                { "id": 4126, "type": "UInt8"},
     
     "boot_part":                { "id": 32768, "type": "UInt8"},
     "factory_reset":            { "id": 32769, "type": "UInt8"}
