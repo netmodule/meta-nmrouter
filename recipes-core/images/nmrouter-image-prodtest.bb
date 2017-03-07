@@ -8,6 +8,8 @@ IMAGE_INSTALL_append = " \
     linux-firmware-wl18xx \
     fct \
     nfs-utils \
+    hydra \
+    hydra-util \
     "
 
 inherit extrausers
