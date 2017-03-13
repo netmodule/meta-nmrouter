@@ -11,3 +11,8 @@ PV = "v2016.04+git${SRCPV}"
 SPL_BINARY = "MLO"
 UBOOT_SUFFIX = "img"
 
+do_deploy_append() {
+    cp ${S}/spl/u-boot-spl.bin ${DEPLOYDIR}/${PN}-spl.bin
+    cp ${S}/u-boot.bin ${DEPLOYDIR}/${PN}.bin
+}
+
