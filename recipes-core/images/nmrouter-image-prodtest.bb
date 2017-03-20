@@ -10,6 +10,7 @@ IMAGE_INSTALL_append = " \
     nfs-utils \
     hydra \
     hydra-util \
+    u-boot-fw-utils \
     "
 
 inherit extrausers
