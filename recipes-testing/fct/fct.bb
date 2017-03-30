@@ -15,6 +15,7 @@ RDEPENDS_${PN}_append = " \
     python3-netclient \
     python3-importlib \
     python3-pydoc \
+    python3-json\
     libpython3 \
     "
 
@@ -29,13 +30,21 @@ S = "${WORKDIR}/git"
 
 FILES_${PN} += "{bindir} {datadir}"
 
+inherit systemd
+SYSTEMD_SERVICE_${PN} = "fct.service"
+
 do_install_append() {
     install -d ${D}${bindir}
     install -m 0755 fct.sh ${D}${bindir}/
 
     install -d ${D}${datadir}/fct
     install -m 0755 fct_init.py ${D}${datadir}/fct/
+    install -m 0755 fct_provisioning.py ${D}${datadir}/fct/
     install -m 0755 logging.conf ${D}${datadir}/fct/
+
+    install -d ${D}/${base_libdir}/systemd/system/
+    install -m 0644 init/fct.service ${D}/${systemd_unitdir}/system/
+
 }
 
 inherit distutils3
