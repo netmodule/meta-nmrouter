@@ -1,3 +1,5 @@
+FILESEXTRAPAHT_prepend := "${THISDIR}/${MACHINE}"
+
 SUMMARY = "NetworkManager"
 SECTION = "net/misc"
 
@@ -14,6 +16,7 @@ SRC_URI = " \
     ${GNOME_MIRROR}/NetworkManager/${@gnome_verdir("${PV}")}/NetworkManager-${PV}.tar.xz \
     file://0001-don-t-try-to-run-sbin-dhclient-to-get-the-version-nu.patch \
     file://${INITIAL_CONNECTION} \
+    file://NetworkManager.conf \
 "
 SRC_URI[md5sum] = "63f1e0d6d7e9099499d062c84c927a75"
 SRC_URI[sha256sum] = "829378f318cc008d138a23ca6a9191928ce75344e7e47a2f2c35f4ac82133309"
@@ -93,4 +96,6 @@ do_install_append() {
     rm -rf ${D}/run ${D}${localstatedir}/run
     mkdir -p ${D}${sysconfdir}/NetworkManager/system-connections
     install -m 0600 ${WORKDIR}/${INITIAL_CONNECTION} ${D}${sysconfdir}/NetworkManager/system-connections/
+
+    install -m 0600 ${WORKDIR}/NetworkManager.conf ${D}${sysconfdir}/NetworkManager/
 }
