@@ -42,3 +42,7 @@ FILES_${PN}-staticdev += " \
 FILES_${PN}-dbg += "${libdir}/ModemManager/.debug"
 
 SYSTEMD_SERVICE_${PN} = "ModemManager.service"
+
+do_install_append_am335x-nbhw16-fct() {
+    sed -i 's/ExecStart=.*/ExecStart=\/usr\/sbin\/ModemManager --debug/g' ${D}/lib/systemd/system/ModemManager.service
+}
