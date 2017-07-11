@@ -56,7 +56,6 @@ IMAGE_INSTALL_append = " \
 IMAGE_INSTALL_cortex9hf-neon_append = " kernel-devicetree "
 IMAGE_INSTALL_cortex9hf_append = " kernel-devicetree "
 IMAGE_INSTALL_append_am335x-nbhw16 = " \
-                nbhw16-ctrl \
                 tibluetooth \
                 bluez5-obex \
                 bluez5-noinst-tools \
