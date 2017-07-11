@@ -50,6 +50,7 @@ IMAGE_INSTALL_append = " \
                 glibc-gconv-utf-16 \
                 glibc-gconv-utf-32 \
                 bridge-utils \
+                gpsd \
                 ${FIRMWARE} \
                 "
 
@@ -59,6 +60,7 @@ IMAGE_INSTALL_append_am335x-nbhw16 = " \
                 tibluetooth \
                 bluez5-obex \
                 bluez5-noinst-tools \
+                canutils \
                 "
 
 LICENSE = "BSD"
