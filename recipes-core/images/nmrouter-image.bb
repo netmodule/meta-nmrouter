@@ -60,7 +60,6 @@ IMAGE_INSTALL_append_am335x-nbhw16 = " \
                 tibluetooth \
                 bluez5-obex \
                 bluez5-noinst-tools \
-                python-pygattlib \
                 "
 
 LICENSE = "BSD"
