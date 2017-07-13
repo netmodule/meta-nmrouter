@@ -1,0 +1,12 @@
+[Unit]
+Description=Start NodeRed server
+
+[Service]
+Environment="HOME=/home/root/"
+Type=simple
+ExecStart=/usr/bin/node-red
+WorkingDirectory=/home/root/
+
+[Install]
+WantedBy=multi-user.target
+
