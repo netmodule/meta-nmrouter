@@ -10,7 +10,8 @@ revision: HEAD
 layers: meta-python, meta-oe, meta-networking
 
 To get an image that is compatible with the NetModule router, build an nmrouter-image. Set the MACHINE in conf/local.conf to 
-MACHINE = "armada-385-nbhw17-nb2800" or
+MACHINE = "armada-385-nbhw17" (NB2800),
+MACHINE = "armada-385-nbhw14" (NB3800/NB3711/NB3701) or
 MACHINE = "am335x-nbhw16" # Internal name for NB800 family
 and add the following layers to conf/bblayers.conf:
 BBLAYERS ?= " \
