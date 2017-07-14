@@ -8,13 +8,10 @@ DESCRIPTION = "Linux kernel for various NetModule hardware"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
-BRANCH ?= "master"
-SRC_URI = "git://git@gitlab.com:eichest/meta-nmrouter.git;protocol=ssh;branch=${BRANCH}"
+SRC_URI = "git://github.com/netmodule/linux.git;protocol=https"
 
-SRCREV ?= "${AUTOREV}"
-PV ?= "4.5-${SRCPV}"
-PV_beaglebone = "4.4-${SRCPV}"
-PV_armada-385-nbhw17-nb2800 = "4.7-${SRCPV}"
+SRCREV ?= "6f7da290413ba713f0cdd9ff1a2a9bb129ef4f6c"
+PV ?= "4.12.0-${SRCPV}"
 
 PR = "r0"
 
