@@ -61,6 +61,7 @@ IMAGE_INSTALL_append_am335x-nbhw16 = " \
                 bluez5-obex \
                 bluez5-noinst-tools \
                 canutils \
+                wakeup-timer \
                 "
 
 LICENSE = "BSD"
