@@ -47,6 +47,8 @@ SRC_URI_append = " \
                  file://ti-connectivity/wl12xx-nvs.bin \
                  file://ti-connectivity/wl18xx-conf.bin \
                  file://ti-connectivity/wl18xx-fw-4.bin \
+                 file://am335x-pm-firmware.bin \
+                 file://am335x-pm-firmware.elf \
                  "
 
 do_install_append() {
