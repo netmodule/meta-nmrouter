@@ -9,27 +9,14 @@ branch: jethro
 revision: HEAD
 layers: meta-python, meta-oe, meta-networking
 
-For images that contain NodeJS extensions:
-URI: https://github.com/imyller/meta-nodejs.git
-branch : jethro
-revision: HEAD
-
-URI: https://github.com/imyller/meta-nodejs-contrib.git
-branch: jethro
-revision: HEAD
-
-
 To get an image that is compatible with the NetModule router, build an nmrouter-image. Set the MACHINE in conf/local.conf to 
 MACHINE = "armada-385-nbhw17-nb2800" or
-MACHINE = "am335x-nbhw16" # AKA NB800
+MACHINE = "am335x-nbhw16" # Internal name for NB800 family
 and add the following layers to conf/bblayers.conf:
 BBLAYERS ?= " \
   <poky dir>/meta \
   <poky dir>/meta-yocto \
   <poky dir>/meta-nmrouter \
-  <poky dir>/meta-telephony \
-  <poky dir>/meta-nodejs \
-  <poky dir>/meta-nodejs-contrib \
   <poky dir>/meta-openembedded/meta-python \
   <poky dir>/meta-openembedded/meta-oe \
   <poky dir>/meta-openembedded/meta-networking \
@@ -39,7 +26,7 @@ NB2800:
     While the NetModule router is running under the original software you have to do the following steps:
         - Find out what boot partition is currently used:
         cat /proc/cmdline
-        - The partition layout is mmcblk0p1 => bootpart0, mmcblk0p2 => bootpart1, mmcblk0p3=> overlay/data partition
+        - The partition layout is mmcblk0p1 => bootpart0, mmcblk0p2 => bootpart1, mmcblk0p3=> overlay/data partition, mmcblk0p4 => user storage
         - Untar the output of the nmrouter-image build to the partition that is not in use (if the above cmd returns mmcblk0p1 then to mmcblk0p2)
         mount /dev/mmcblk0p2 /mnt
         rm -rf /mnt/*
@@ -132,6 +119,12 @@ NB2800:
     devmem2 0xfd000020 hw 0x02
 
 NB800:
+Coming from NetModule Software:
+    - Use the same steps as for NB2800 to install a custom rootfs
+    - You don't need to modify the u-boot environment, the NB800 automatically tries to load the correct dtb and the kernel /boot/zImage
+    - There is no FPGA available necessary for the NB800
+
+Coming from an older Yocto image:
     - To update the software you can do a sw-update.sh -l <rootfs.tar.gz>
     - To read and write to the board descriptor use bd read/read-all/write
     - To connect configure the modem and network interface use mmcli and nmcli (ModemManager and NetworkManager)
