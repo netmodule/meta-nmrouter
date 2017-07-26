@@ -64,5 +64,12 @@ IMAGE_INSTALL_append_am335x-nbhw16 = " \
                 wakeup-timer \
                 "
 
+FPGA_INSTALL = " \
+    nm-scripts-fpga \
+    "
+
+IMAGE_INSTALL_append_armada-385-nbhw14 = " ${FPGA_INSTALL}"
+IMAGE_INSTALL_append_armada-385-nbhw17 = " ${FPGA_INSTALL}"
+
 LICENSE = "BSD"
 
