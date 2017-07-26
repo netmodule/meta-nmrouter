@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 hw=$1
 sim=$2

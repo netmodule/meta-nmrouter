@@ -3,7 +3,7 @@ DESCRIPTION = "This are some helper scripts provided by netmodule"
 PR = "r1"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=4d92cd373abda3937c2bc47fbc49d690 \
-                    file://${COREBASE}/meta/COPYING.GPLv2;md5=3da9cfbcb788c80a0384361b4de20420"
+                    file://${COREBASE}/meta/COPYING.GPLv2;md5=751419260aa954499f7abaabaa882bbe"
 
 SRC_URI = "file://power-pcie-slot.sh \
            file://reset-pcie-slot.sh \
