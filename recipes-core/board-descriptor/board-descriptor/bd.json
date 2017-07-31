@@ -58,6 +58,9 @@
     "pd_usbhost":               { "id": 4124, "type": "String"},
     "pd_dev_tree":              { "id": 4125, "type": "String"},
     "patch_ver":                { "id": 4126, "type": "UInt8"},
+    "pd_phy2":                  { "id": 4127, "type": "String"},
+    "pd_serdes":                { "id": 4128, "type": "UInt16"},
+    "pd_shield":                { "id": 4129, "type": "UInt16"},
     
     "boot_part":                { "id": 32768, "type": "UInt8"},
     "factory_reset":            { "id": 32769, "type": "UInt8"}
