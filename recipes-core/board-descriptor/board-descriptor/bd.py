@@ -63,7 +63,7 @@ def read_descriptors(config):
             desc = descriptor.Descriptor(eeprom["path"],
                                          valid_bd["start"],
                                          valid_bd["size"],
-                                         config_table)
+                                         json.loads(config_table))
             desc.read()
             descs.append(desc)
     return descs

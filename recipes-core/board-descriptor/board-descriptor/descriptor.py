@@ -1,5 +1,3 @@
-import json
-
 
 def _array_to_int(data):
     # This one works for python2.7 and python3
@@ -30,8 +28,6 @@ def _array_to_partition(data):
     }
 
     return part
-
-    return _array_to_parition_gen(data, 4)
 
 
 def _array_to_partition64(data):
@@ -112,6 +108,7 @@ def _dict_to_partition64(data):
 
 
 def _not_supported_yet(data):
+    del data
     raise NotImplementedError("Setting this type is not supported yet")
 
 _type_to_value = {
@@ -185,12 +182,12 @@ class _BdRaw:
 
 
 class _BdParsed:
-    def __init__(self, strtype, value):
-        self.value = self._value_type(strtype, value)
+    def __init__(self, str_type, value):
+        self.value = self._value_type(str_type, value)
 
-    def _value_type(self, strtype, value):
+    def _value_type(self, str_type, value):
         for key, fun in _string_to_type.items():
-            if key == strtype:
+            if key == str_type:
                 return fun(value)
 
 
@@ -199,7 +196,10 @@ class Descriptor:
         self.file = file
         self.offset = offset
         self.max_size = max_size
-        self.config_table = json.loads(config_table)
+        self.config_table = config_table
+        self.bd_raw = None
+        self.bd_parsed = None
+        self.tlv_by_name = None
 
     def _read_raw_bd(self):
         fd = open(self.file, "rb")
@@ -218,6 +218,7 @@ class Descriptor:
             if tlv.tag == value["id"]:
                 parsed = _BdParsed(value["type"], tlv.value)
                 return key, parsed.value
+        return "unknown_" + str(tlv.tag), tlv.value
 
     def _parse_data(self, bdraw):
         bdparsed = {}
@@ -228,26 +229,26 @@ class Descriptor:
             i = 1
             while key in bdparsed:
                 key = name + "_" + str(i)
-                i = i + 1
+                i += 1
             bdparsed[key] = value
             tlv_by_name[key] = tlv
 
         return bdparsed, tlv_by_name
 
     def read(self):
-        self.bdraw = self._read_raw_bd()
-        self.bdparsed, self.tlv_by_name = self._parse_data(self.bdraw)
+        self.bd_raw = self._read_raw_bd()
+        self.bd_parsed, self.tlv_by_name = self._parse_data(self.bd_raw)
 
     def get_list(self):
-        return self.bdparsed
+        return self.bd_parsed
 
     def get(self, name):
         name = name.split(".")
-        element = self.bdparsed
+        element = self.bd_parsed
         # Search the final element to print
-        # This allows names in the form parition64.flags
+        # This allows names in the form partition64.flags
         for key in name:
-            if not key in element:
+            if key not in element:
                 return None
             element = element[key]
         return element
@@ -269,6 +270,8 @@ class Descriptor:
         return dictionary
 
     def _do_set(self, name, value, tlv):
+        tlv_type = None
+
         for key, config_item in self.config_table.items():
             if tlv.tag == config_item["id"]:
                 tlv_type = config_item["type"]
@@ -282,11 +285,11 @@ class Descriptor:
                 if not type(name) is list:
                     self._write_bd(tlv.pos, fun(value), tlv.length)
                 else:
-                    element = self.bdparsed[name[0]]
+                    element = self.bd_parsed[name[0]]
                     # if we have changed the element it will be our value again
                     value = self._update_dict(element, name[1:], value)
                     self._write_bd(tlv.pos, fun(value), tlv.length)
-                self.bdparsed[name[0]] = value
+                self.bd_parsed[name[0]] = value
 
     def set(self, name, value):
         if self.tlv_by_name is None:
@@ -298,7 +301,7 @@ class Descriptor:
         if tlv is None:
             return False
 
-        if not self.bdraw.is_writable:
+        if not self.bd_raw.is_writable:
             raise IOError("This operation is not permitted on "
                           "this descriptor (ro)")
 
