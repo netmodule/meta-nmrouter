@@ -18,6 +18,7 @@ IMAGE_INSTALL = " \
     systemd-serialgetty \
     networkmanager \
     modemmanager \
+    board-descriptor \
     "
 
 LICENSE = "BSD"
