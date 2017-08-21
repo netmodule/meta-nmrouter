@@ -5,7 +5,7 @@ require u-boot-nm.inc
 
 SRC_URI = "git://github.com/netmodule/u-boot.git;protocol=https;branch=nbhw16-2016.04"
 
-SRCREV ?= "a6f157c6dbd048b452c7e2640215c55be658780c"
+SRCREV ?= "afb88d5192d4bd6b7734e3ae1de9ee2929c08058"
 PV = "v2016.04+git${SRCPV}"
 
 SPL_BINARY = "MLO"
