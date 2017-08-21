@@ -12,7 +12,13 @@ SPL_BINARY = "MLO"
 UBOOT_SUFFIX = "img"
 
 do_deploy_append() {
+    rm -f ${DEPLOYDIR}/${PN}-spl.bin
+    rm -f ${DEPLOYDIR}/${PN}.bin
+    rm -f ${DEPLOYDIR}/${PN}.img
+    rm -f ${DEPLOYDIR}/MLO-${PN}
     cp ${S}/spl/u-boot-spl.bin ${DEPLOYDIR}/${PN}-spl.bin
     cp ${S}/u-boot.bin ${DEPLOYDIR}/${PN}.bin
+    cp ${S}/u-boot.img ${DEPLOYDIR}/${PN}.img
+    cp ${S}/MLO ${DEPLOYDIR}/MLO-${PN}
 }
 
