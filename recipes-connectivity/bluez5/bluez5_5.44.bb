@@ -4,6 +4,10 @@ SRC_URI[sha256sum] = "0c321e291f8b45e6a78e379dfe80592b65955a0f0ab191f1cca0edd8ec
 
 EXTRA_OECONF += "--enable-deprecated"
 
+SRC_URI_append = " file://fix-out-of-bounds-heap-read.patch"
+
+PR = "r2"
+
 # noinst programs in Makefile.tools that are conditional on READLINE
 # support
 NOINST_TOOLS_READLINE ?= " \
